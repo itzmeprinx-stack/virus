@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine?</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .box {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 { color: #ff4d6d; }
+
+    button {
+        padding: 12px 25px;
+        margin: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    #yesBtn { background-color: #ff4d6d; color: white; }
+    #noBtn { background-color: #ccc; position: relative; }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    img {
+        width: 150px;
+        margin: 15px auto;
+        border-radius: 12px;
+        display: block;
+    }
+
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        text-align: center;
+        display: none;
+        z-index: 10;
+        max-width: 300px;
+    }
+
+    .overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        top: 0;
+        left: 0;
+        display: none;
+        z-index: 5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        body {
+            padding: 20px;
+        }
+
+        .box {
+            padding: 30px 20px;
+            max-width: 90vw;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 8px;
+            font-size: 14px;
+        }
+
+        .popup {
+            padding: 20px;
+            max-width: 85vw;
+            margin: 20px;
+        }
+
+        img {
+            width: 120px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 10px;
+        }
+
+        .box {
+            padding: 20px 15px;
+            max-width: 95vw;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0 0 20px 0;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin: 6px;
+            font-size: 13px;
+            width: 100%;
+            max-width: 150px;
+        }
+
+        .button-container {
+            flex-wrap: wrap;
+        }
+
+        .popup {
+            padding: 15px;
+            max-width: 90vw;
+            margin: 15px;
+        }
+
+        #popupText {
+            font-size: 16px;
+        }
+
+        img {
+            width: 100px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- General Popup -->
+<div class="popup" id="popup">
+    <h2 id="popupText"></h2>
+    <img id="popupGif" src="" alt="meme" style="display:none;">
+    <div id="popupExtra"></div>
+    <br>
+    <button onclick="closePopup()">Cancel</button>
+</div>
+
+<div class="box">
+    <h1>Can you be my Valentine? 💖</h1>
+    <div class="button-container">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById('noBtn');
+const yesBtn = document.getElementById('yesBtn');
+const popup = document.getElementById('popup');
+const overlay = document.getElementById('overlay');
+const popupText = document.getElementById('popupText');
+const popupGif = document.getElementById('popupGif');
+const popupExtra = document.getElementById('popupExtra');
+
+let noClicks = 0;
+
+function showPopup(text, gif=null, extraHTML=""){
+    popupText.textContent = text;
+
+    if(gif){
+        popupGif.src = gif;
+        popupGif.style.display = 'block';
+    }else{
+        popupGif.style.display = 'none';
+    }
+
+    popupExtra.innerHTML = extraHTML;
+
+    popup.style.display = 'block';
+    overlay.style.display = 'block';
+}
+
+function closePopup(){
+    popup.style.display = 'none';
+    overlay.style.display = 'none';
+}
+
+// NO button behavior
+noBtn.addEventListener('click', () => {
+    noClicks++;
+
+    if(noClicks === 1){
+        showPopup("Anong no?? 😭");
+    }
+    else if(noClicks === 2){
+        showPopup(
+            "Bawal ngani NO 😤",
+            "https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif"
+        );
+    }
+    else if(noClicks >= 3){
+        // Make button run away on every click after second click
+        closePopup();
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+
+        noBtn.style.position = 'fixed';
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+    }
+});
+
+// YES button popup
+yesBtn.addEventListener('click', () => {
+    showPopup(
+        "YAYYY!! 🥰 Thank you for saying YES!",
+        "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+        `<p>I'll take you on a date then mweheheh</p>
+         <button onclick="openSunflower()">Click this </button>`
+    );
+});
+
+// Sunflower page
+function openSunflower(){
+    const newWindow = window.open('', '_blank');
+
+    if(!newWindow){
+        alert('Popup blocked! Please allow popups for this site 🌻');
+        return;
+    }
+
+    newWindow.document.open();
+    newWindow.document.write(`
+        <html>
+        <head>
+            <title>For You 🌻</title>
+            <style>
+                body{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    flex-direction:column;
+                    height:100vh;
+                    margin:0;
+                    font-family:Arial;
+                    background:linear-gradient(135deg,#fff6a9,#ffe08a);
+                    text-align:center;
+                }
+                h1{color:#ff7a00;}
+                .sunflower-container{
+                    perspective: 1000px;
+                }
+                .sunflower {
+                    width: 200px;
+                    height: 200px;
+                    position: relative;
+                    animation: sway 3s ease-in-out infinite;
+                }
+                .petal {
+                    position: absolute;
+                    width: 30px;
+                    height: 80px;
+                    background: linear-gradient(135deg, #FFD700, #FFA500);
+                    border-radius: 50%;
+                    left: 50%;
+                    top: 0;
+                    transform-origin: 50% 100px;
+                    margin-left: -15px;
+                }
+                .petal:nth-child(1) { transform: rotate(0deg); }
+                .petal:nth-child(2) { transform: rotate(45deg); }
+                .petal:nth-child(3) { transform: rotate(90deg); }
+                .petal:nth-child(4) { transform: rotate(135deg); }
+                .petal:nth-child(5) { transform: rotate(180deg); }
+                .petal:nth-child(6) { transform: rotate(225deg); }
+                .petal:nth-child(7) { transform: rotate(270deg); }
+                .petal:nth-child(8) { transform: rotate(315deg); }
+                .center {
+                    position: absolute;
+                    width: 60px;
+                    height: 60px;
+                    background: radial-gradient(circle, #8B4513, #654321);
+                    border-radius: 50%;
+                    top: 70px;
+                    left: 70px;
+                    box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3);
+                }
+                .seeds {
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: #654321;
+                    border-radius: 50%;
+                }
+                @keyframes sway {
+                    0%, 100% { transform: rotateZ(-2deg); }
+                    50% { transform: rotateZ(2deg); }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>This sunflower is for you 🌻</h1>
+            <div class="sunflower-container">
+                <div class="sunflower">
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="petal"></div>
+                    <div class="center">
+                        <div class="seeds" style="top: 10px; left: 10px;"></div>
+                        <div class="seeds" style="top: 10px; left: 25px;"></div>
+                        <div class="seeds" style="top: 10px; left: 40px;"></div>
+                        <div class="seeds" style="top: 25px; left: 10px;"></div>
+                        <div class="seeds" style="top: 25px; left: 25px;"></div>
+                        <div class="seeds" style="top: 25px; left: 40px;"></div>
+                        <div class="seeds" style="top: 40px; left: 10px;"></div>
+                        <div class="seeds" style="top: 40px; left: 25px;"></div>
+                        <div class="seeds" style="top: 40px; left: 40px;"></div>
+                    </div>
+                </div>
+            </div>
+            <p>I can't wait for our date ❤️</p>
+        </body>
+        </html>
+    `);
+    newWindow.document.close();
+}
+</script>
+
+</body>
+</html>
